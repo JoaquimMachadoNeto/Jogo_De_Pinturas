@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Obra do Picasso</title>
+</head>
+<body>
+    <canvas width="600" height="400">
+    </canvas>
+    <script>
+        function desenha_quadrado(x, y, tamanho, cor){
+    pincel.fillStyle = cor;
+    pincel.fillRect(x, y, tamanho, tamanho);
+}
+
+function desenha_circulo(x, y, raio, cor){
+    pincel.fillStyle = cor;
+    pincel.beginPath();
+    pincel.arc(x, y, raio, 0, 2 * Math.PI);
+    pincel.fill();
+}
+
+function desenha_paleta_cor(){
+    desenha_quadrado(XVermelho, Yquadrados, tamanho_quadrados, 'red');
+    desenha_quadrado(XVerde, Yquadrados, tamanho_quadrados, 'green');
+    desenha_quadrado(XAzul, Yquadrados, tamanho_quadrados, 'blue');
+}
+
+function movimento_mouse(evento){
+    let x = evento.pageX - tela.offsetLeft;
+    let y = evento.pageY - tela.offsetTop;
+
+    if(desenha && podeDesenharNaArea(x, y)){
+        desenha_circulo(x, y, 5, corAtual);
+    }
+}
+
+function habilitaDesenhar(){
+    desenha = true;
+}
+
+function desabilitaDesenhar(){
+    desenha = false;
+}
+
+function podeDesenharNaArea(x, y){
+    if(x >= 0 && x < 3 * tamanho_quadrados &&
+       y >= 0 && y < tamanho_quadrados){
+        return false;
+    }
+
+    return true;
+}
+
+function selecionaCor(evento){
+    let x = evento.pageX - tela.offsetLeft;
+    let y = evento.pageY - tela.offsetTop;
+
+    if(y > Yquadrados && y < Yquadrados + tamanho_quadrados){
+
+        if(x > XVermelho && x < XVermelho + tamanho_quadrados){
+            corAtual = 'red';
+        }
+
+        else if(x > XVerde && x < XVerde + tamanho_quadrados){
+            corAtual = 'green';
+        }
+
+        else if(x > XAzul && x < XAzul + tamanho_quadrados){
+            corAtual = 'blue';
+        }
+    }
+}
+
+var tela = document.querySelector('canvas');
+var pincel = tela.getContext('2d');
+
+pincel.fillStyle = 'lightgray';
+pincel.fillRect(0, 0, 600, 400);
+
+var desenha = false;
+var corAtual = 'blue';
+
+var XVermelho = 0;
+var XVerde = 50;
+var XAzul = 100;
+
+var Yquadrados = 0;
+var tamanho_quadrados = 50;
+
+desenha_paleta_cor();
+
+tela.onmousemove = movimento_mouse;
+tela.onmousedown = habilitaDesenhar;
+tela.onmouseup = desabilitaDesenhar;
+tela.onclick = selecionaCor;
+    </script>
+</body>
+</html>
